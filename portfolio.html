@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Avinash Paviya — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0c0c0e;--paper:#ecebe6;--mute:#8a8a86;--hot:#ff2a1f;--f:'Bricolage Grotesque','Helvetica Neue',Arial,sans-serif}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--f);background:var(--ink);color:var(--paper);overflow-x:hidden;cursor:none}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--hot);outline-offset:3px}
+.cur{position:fixed;left:0;top:0;width:14px;height:14px;border-radius:50%;background:#fff;mix-blend-mode:difference;pointer-events:none;z-index:120;transition:width .25s,height .25s,margin .25s}
+.cur.big{width:64px;height:64px;margin:-25px 0 0 -25px}
+#bar{position:fixed;top:0;left:0;height:3px;width:100%;background:var(--hot);transform:scaleX(0);transform-origin:0 0;z-index:110}
+/* loader */
+#loader{position:fixed;inset:0;background:var(--ink);z-index:100;display:grid;place-items:center;transition:clip-path 1.1s cubic-bezier(.77,0,.18,1);clip-path:inset(0)}
+#loader.done{clip-path:inset(0 0 100% 0)}
+#loader svg{position:absolute;width:min(70vw,420px);overflow:visible}
+#loader path{fill:none;stroke:#fff;stroke-width:1.2;stroke-dasharray:1;stroke-dashoffset:1;animation:draw 2s .2s forwards ease-in-out}
+@keyframes draw{to{stroke-dashoffset:0}}
+#loader b{font-weight:800;font-size:clamp(28px,6vw,54px);letter-spacing:.35em;text-shadow:0 0 22px #fff8}
+#pct{position:absolute;bottom:6vh;right:5vw;font-size:14px;color:var(--mute)}
+nav{position:fixed;top:0;left:0;right:0;display:flex;justify-content:space-between;padding:22px 4vw;z-index:60;mix-blend-mode:difference;color:#fff;font-size:14px}
+nav div{display:flex;gap:28px}
+/* hero */
+.hero{min-height:100vh;background:var(--paper);color:var(--ink);position:relative;display:grid;place-items:center;overflow:hidden}
+.hero h1{font-weight:800;font-size:clamp(54px,13.5vw,230px);line-height:.82;letter-spacing:-.045em;text-align:center;text-transform:uppercase;position:relative;z-index:1}
+.hero h1 span{display:block;overflow:hidden;padding-bottom:.04em}
+.hero h1 i{display:block;font-style:normal;transform:translateY(105%);transition:transform 1.2s cubic-bezier(.2,.8,.2,1)}
+body.go .hero h1 i{transform:none}
+body.go .hero h1 span+span i{transition-delay:.14s}
+.person{position:absolute;bottom:0;left:50%;width:min(34vw,380px);height:78vh;transform:translateX(-50%);z-index:2;overflow:hidden;clip-path:inset(100% 0 0 0);transition:clip-path 1.4s .5s cubic-bezier(.2,.8,.2,1)}
+body.go .person{clip-path:inset(0)}
+.person img{width:100%;height:100%;object-fit:cover;object-position:top;filter:grayscale(1) contrast(1.1);transform:scale(1.08)}
+.hero small{position:absolute;bottom:5vh;z-index:3;font-size:13px;max-width:240px;line-height:1.5}
+.hero .l{left:4vw}.hero .r{right:4vw;text-align:right}
+.hint{position:absolute;top:50%;right:4vw;z-index:3;font-size:12px;writing-mode:vertical-rl}
+/* about */
+.about{min-height:170vh;position:relative;background:#050506;--x:50%;--y:40%}
+.about .sticky{position:sticky;top:0;height:100vh;display:grid;place-items:center;overflow:hidden;padding:0 6vw}
+.reveal{position:absolute;inset:0;background:url(knight.jpg) center 20%/cover;-webkit-mask:radial-gradient(circle 230px at var(--x) var(--y),#000 20%,transparent 100%);mask:radial-gradient(circle 230px at var(--x) var(--y),#000 20%,transparent 100%);opacity:.9}
+.about h2{font-weight:800;font-size:clamp(60px,15vw,260px);letter-spacing:-.05em;line-height:.85;text-transform:uppercase;text-align:center;transform:scale(var(--s,1));opacity:var(--o,1);position:relative}
+.glitch::before,.glitch::after{content:attr(data-t);position:absolute;inset:0;mix-blend-mode:screen;opacity:0;white-space:pre}
+.glitch::before{color:#f0f;transform:translate(-4px,0)}.glitch::after{color:#0ff;transform:translate(4px,0)}
+.glitch.on::before,.glitch.on::after{opacity:.8;animation:gl .35s steps(2) 3}
+@keyframes gl{0%{clip-path:inset(10% 0 60% 0)}50%{clip-path:inset(60% 0 8% 0)}100%{clip-path:inset(30% 0 40% 0)}}
+.bio{position:absolute;left:50%;top:50%;width:min(90vw,680px);transform:translate(-50%,-50%);text-align:center;font-size:clamp(18px,2.4vw,28px);line-height:1.35;opacity:var(--b,0);pointer-events:none;text-shadow:0 2px 20px #000}
+.stats{display:flex;gap:6vw;justify-content:center;margin-top:30px}
+.stats b{display:block;font-size:clamp(34px,6vw,70px);font-weight:800;letter-spacing:-.04em}
+.stats span{font-size:13px;color:#bbb}
+/* marquee */
+.words{background:var(--ink);padding:12vh 0;overflow:hidden;white-space:nowrap}
+.words div{font-weight:800;font-size:clamp(48px,11vw,190px);letter-spacing:-.04em;text-transform:uppercase;line-height:1}
+.words div:nth-child(even){-webkit-text-stroke:1.5px var(--paper);color:transparent}
+.skills{background:var(--hot);color:var(--ink);overflow:hidden;white-space:nowrap;padding:18px 0;font-weight:800;font-size:clamp(20px,3vw,34px);text-transform:uppercase}
+.skills div{display:inline-block;animation:mq 75s linear infinite}
+@keyframes mq{to{transform:translateX(-50%)}}
+/* work */
+.work{background:var(--paper);color:var(--ink);height:100vh;min-height:640px;position:relative;overflow:hidden;perspective:1400px;user-select:none}
+.chips{position:absolute;top:13vh;left:4vw;right:4vw;display:flex;gap:8px;flex-wrap:wrap;z-index:200}
+.chips button{border:1px solid var(--ink);background:none;border-radius:99px;padding:6px 16px;font-size:13px;cursor:none}
+.chips button.on,.chips button:hover{background:var(--ink);color:var(--paper)}
+.stage{position:absolute;inset:0;transform-style:preserve-3d}
+.card{position:absolute;left:50%;top:52%;width:min(62vw,500px);aspect-ratio:16/10;margin:calc(min(62vw,500px)*-.3) 0 0 calc(min(62vw,500px)*-.5);border-radius:6px;overflow:hidden;color:#fff;padding:20px;display:flex;flex-direction:column;justify-content:space-between;will-change:transform;border:0;text-align:left;cursor:none}
+.card b{font-weight:800;font-size:clamp(24px,4vw,46px);letter-spacing:-.04em;line-height:.95}
+.card span{font-size:13px;opacity:.8;max-width:34ch;line-height:1.4}
+.card em{font-style:normal;font-size:12px;border:1px solid #fff7;border-radius:99px;padding:4px 12px;align-self:flex-start}
+.card::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,#fff3 50%,transparent 60%);transform:translateX(-100%);transition:transform .8s}
+.card:hover::after{transform:translateX(100%)}
+.info{position:absolute;bottom:10vh;left:0;right:0;text-align:center;font-size:15px}
+.info b{display:block;font-size:22px;margin-bottom:4px;letter-spacing:-.02em}
+.ctrl{position:absolute;bottom:3.5vh;left:50%;transform:translateX(-50%);display:flex;gap:14px;z-index:200}
+.ctrl button{border:1px solid var(--ink);background:none;border-radius:99px;padding:8px 22px;cursor:none}
+.ctrl button:hover{background:var(--ink);color:var(--paper)}
+/* modal */
+dialog{margin:auto;width:min(92vw,620px);border:0;border-radius:10px;background:var(--ink);color:var(--paper);padding:34px;max-height:88vh;overflow:auto}
+dialog::backdrop{background:#000c;backdrop-filter:blur(6px)}
+dialog[open]{animation:pop .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes pop{from{transform:translateY(40px) scale(.96);opacity:0}}
+dialog h5{font-weight:800;font-size:clamp(30px,6vw,52px);letter-spacing:-.04em;line-height:.95;margin:10px 0 16px}
+dialog p{color:#c8c8c4;line-height:1.55;margin-bottom:16px}
+dialog .tag{display:inline-block;border:1px solid var(--hot);color:var(--hot);border-radius:99px;padding:3px 12px;font-size:12px}
+dialog .row{display:flex;gap:12px;flex-wrap:wrap;margin-top:8px}
+dialog .row a,dialog .row button{border:1px solid #fff6;border-radius:99px;padding:8px 18px;background:none;cursor:none}
+dialog .row a:hover,dialog .row button:hover{background:var(--paper);color:var(--ink)}
+/* gallery */
+.gal{background:var(--ink);padding:14vh 0;overflow:hidden}
+.gal h3{font-weight:800;font-size:clamp(40px,8vw,120px);letter-spacing:-.04em;padding:0 4vw 5vh;text-transform:uppercase}
+.rail{display:flex;gap:2vw;width:max-content;padding:0 2vw;animation:mq 60s linear infinite}
+.gal:hover .rail{animation-play-state:paused}
+.rail img{height:62vh;width:auto;border-radius:6px;transition:transform .5s,filter .5s;filter:grayscale(.7)}
+.rail img:hover{transform:scale(1.04) rotate(-1.5deg);filter:none}
+/* footer */
+footer{background:var(--ink);padding:14vh 6vw 6vh;display:grid;grid-template-columns:1fr 1fr;gap:6vw;align-items:center;border-top:1px solid #222}
+.ph{width:min(100%,380px);aspect-ratio:1;border-radius:50%;overflow:hidden;animation:fl 6s ease-in-out infinite}
+.ph img{width:100%;height:100%;object-fit:cover;display:block}
+@keyframes fl{50%{transform:translateY(-14px) rotate(2deg)}}
+footer h4{font-weight:800;font-size:clamp(34px,6vw,96px);letter-spacing:-.04em;line-height:.9;margin-bottom:24px}
+footer p{color:#aaa;max-width:46ch;line-height:1.55;margin-bottom:26px}
+.soc{display:flex;gap:22px;flex-wrap:wrap;margin-bottom:26px}
+.soc a{border-bottom:1px solid #fff5;padding-bottom:2px}
+.mail{border:1px solid var(--hot);background:var(--hot);color:var(--ink);font-weight:800;border-radius:99px;padding:12px 26px;cursor:none;transition:transform .2s}
+.cp{grid-column:1/-1;color:var(--mute);font-size:12px;margin-top:6vh}
+@media(max-width:700px){footer{grid-template-columns:1fr}.hero small,.hint{display:none}nav div{gap:16px}body,.chips button,.card,.ctrl button,.mail,dialog .row a,dialog .row button{cursor:auto}.cur{display:none}.stats{gap:5vw}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01s!important;transition-duration:.01s!important}}
+</style>
+</head>
+<body>
+<div class="cur" id="cur"></div><div id="bar"></div>
+
+<div id="loader" aria-hidden="true">
+  <svg viewBox="-200 -100 400 200"><path pathLength="1" d="M0-90C50-95 100-60 105-10C110 45 60 90 0 92C-60 95-108 50-105-5C-102-60-55-88 0-90Z"/></svg>
+  <b>AVINASH.</b><span id="pct">0%</span>
+</div>
+
+<nav><a href="#top" class="sc">AVINASH.</a><div><a href="#about" class="sc">About</a><a href="#work" class="sc">Work</a><a href="#gallery" class="sc">Gallery</a><a href="#contact" class="sc">Contact</a></div></nav>
+
+<header class="hero" id="top">
+  <h1><span><i>Explore my</i></span><span><i>Portfolio</i></span></h1>
+  <div class="person" id="person"><img src="suit.png" alt="Avinash Paviya"></div>
+  <small class="l">Electrical and Computer Engineering student at MITS, Gwalior.<br>Embedded systems, IoT and web.</small>
+  <small class="r">Hardware that talks to<br>beautiful interfaces.</small>
+  <span class="hint">Scroll</span>
+</header>
+
+<section class="about" id="about">
+  <div class="sticky">
+    <div class="reveal"></div>
+    <h2 id="aboutH" class="glitch" data-t="About&#10;me">About<br>me</h2>
+    <div class="bio" id="bio">
+      <p>I'm Avinash, an Electrical and Computer Engineering student at MITS, Gwalior. I build ESP32 devices, web apps, games and a manga platform.</p>
+      <div class="stats"><div><b data-n="0" id="s1">0</b><span>Projects</span></div><div><b id="s2">0</b><span>Live sites</span></div><div><b id="s3">0</b><span>Hardware builds</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="words" aria-label="What I do">
+  <div data-sp="-6">Where I've been building</div>
+  <div data-sp="8">Creative technologist</div>
+  <div data-sp="-8">Embedded + IoT</div>
+  <div data-sp="6">Full stack developer</div>
+</section>
+<div class="skills" aria-hidden="true"><div id="sk"></div></div>
+
+<section class="work" id="work">
+  <div class="chips" id="chips"></div>
+  <div class="stage" id="stage"></div>
+  <div class="info" id="info"></div>
+  <div class="ctrl"><button id="prev" aria-label="Previous project">Prev</button><button id="next" aria-label="Next project">Next</button></div>
+</section>
+
+<dialog id="dlg"><span class="tag" id="dS"></span><h5 id="dN"></h5><p id="dD"></p><p id="dT" style="font-size:14px"></p><div class="row" id="dL"><button onclick="dlg.close()">Close</button></div></dialog>
+
+<section class="gal" id="gallery">
+  <h3>Me, in a few moods</h3>
+  <div class="rail" id="rail"></div>
+</section>
+
+<footer id="contact">
+  <div class="ph"><img src="circle.jpg" alt="Avinash Paviya portrait"></div>
+  <div>
+    <h4>Let's build<br>something.</h4>
+    <p>I'm Avinash Paviya, a B.Tech Electrical and Computer Engineering student at Madhav Institute of Technology &amp; Science, Gwalior, working across embedded systems, IoT and software. I also create manga. Open to internships, freelance work and collaboration.</p>
+    <div class="soc">
+      <a href="https://github.com/avinashsingh1095" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://linkedin.com/in/avinashsingh1095" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://instagram.com/avinashsingh1095" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://youtube.com/@avinashsingh1095" target="_blank" rel="noopener">YouTube</a>
+      <a href="https://x.com/Avinash10951" target="_blank" rel="noopener">X</a>
+    </div>
+    <button class="mail" id="mail" data-m="avinash1919982006@gmail.com">Copy email</button>
+  </div>
+  <div class="cp">© 2026 Avinash Paviya</div>
+</footer>
+
+<script>
+const C={iot:["IoT & Hardware","#0b3b4a"],web:["Web","#1f1a3d"],game:["Games","#3d0f0f"],full:["Full-stack","#1d2a12"],hack:["Hackathon & Startup","#3b2a0a"],acad:["Academic","#232323"]};
+// n=name c=category s=status d=description t=tech l=live g=github. Edit statuses here as you verify them.
+const P=[
+["Smart Water Quality Monitoring","iot","Hardware prototype","ESP32 system reading pH, TDS, turbidity and temperature into a quality score and dashboard. Example readings are illustrative, not proof of potability.","ESP32, pH / TDS / turbidity / temperature sensors"],
+["Visitor Alert System","iot","Status unverified","Detects visitors with motion and distance sensors and raises an alert. ESP32-CAM integration is intended.","Arduino UNO, PIR, HC-SR04, ESP32-CAM, buzzer"],
+["Smart AQI & Temperature Monitor","iot","Hardware prototype","ESP32 device showing air quality and temperature on an OLED, with a companion website. MQ135 readings are estimates and need calibration.","ESP32, MQ135, BMP280, OLED"],
+["Embedded Lab Experiments","iot","Academic deliverable","Nine separate experiments: LED control, potentiometer dimmer, threshold buzzer, relay bulb, ultrasonic alert, soil moisture, DHT11, rain detection and L298N motor control.","Arduino, C++"],
+["CircuitBench","web","Deployed","Electronics tutorial website with a tutorial index and technical guides, deployed on Netlify.","HTML, CSS, JavaScript, Netlify, GitHub","https://circuitbench1.netlify.app/","https://github.com/avinashsingh1095/circuitbench.git"],
+["Vidyalaya Pulse","hack","Working prototype","School platform for attendance, notes, marks and parent links. Built for SIH preparation with team TECHNOVERSE (MITS/SIH26/136). Not a production system.","Node.js, Express, SQLite, JavaScript"],
+["Learn Before 2027","web","Deployed","Personal roadmap and developer profile site.","HTML, CSS, JavaScript, GitHub Pages","https://avinashsingh1095.github.io/Learn-Before-2027----Avinash-singh-paviya/"],
+["CastingCall","full","Planned","Audition platform for performers: sign-up, casting listings, applications and a casting-team dashboard, later as an installable PWA and Android app.","Planned: backend, database, PWA"],
+["Rakshabandhan Special","game","Deployed","Festival-themed slicing game that runs in the browser.","JavaScript, Netlify","https://helpful-douhua-3c1e98.netlify.app/"],
+["Snake Eye","game","Planned","Snake controlled by camera-based hand gestures instead of arrow buttons.","HTML, Canvas, JavaScript, hand tracking"],
+["Flappy Bird Advanced","game","Status unverified","Enhanced side-scrolling arcade game with obstacle generation, scoring and restart.","JavaScript, Canvas"],
+["KisanDirect","hack","Planned","Farmer-to-consumer marketplace concept for SIH26033: produce listings, buyer discovery, ordering and price transparency.","Concept"],
+["Prompt Library","web","Status unverified","Organise, search and copy reusable AI prompts by category.","HTML, CSS, JavaScript"],
+["Festival Game Engine","game","Planned","Reusable foundation for festival-themed browser games: scoring, input, animation and game states.","JavaScript"],
+["MangaASP (INKBOUND)","web","Status unverified","Manga platform for reading and publishing my own manga.","Web"],
+["FRIDAY Assistant","web","Status unverified","Iron Man-inspired AI voice assistant built as an installable web app.","PWA, JavaScript"],
+["Domain Expansion","web","Status unverified","Jujutsu Kaisen-inspired 3D web experience controlled with hand tracking.","Three.js, MediaPipe, GLSL"],
+["Hatiyana","game","Status unverified","Gamified running app where you capture territory by running.","GPS, JavaScript"],
+["QR/FORGE","web","Status unverified","Full-featured QR code generator.","JavaScript"],
+["Student OS","web","Status unverified","Academic tracker with XP, Pomodoro timer and SGPA calculator.","HTML, JavaScript"],
+["The Archive","web","Status unverified","Self-hosted gallery for 500+ photos and videos with tags, albums and zip downloads.","Web"],
+["Power Grid Simulator","game","Status unverified","Game about running the Indian power grid.","Godot 4"],
+["Android File Organizer","full","Status unverified","Android app that sorts documents, photos and videos into custom folders.","Kotlin, Android Studio"],
+["Year Quizzes Generator","web","Status unverified","Quiz app that generates questions from PDFs using Claude.","React, Claude API"],
+["Fundamentals of Virtual Reality","acad","Academic deliverable","NPTEL-related presentation on VR concepts. Not a software application.","Slides"],
+["Introduction to Machine Learning","acad","Academic deliverable","Course presentation on core ML concepts. No trained model is claimed.","Slides"],
+["Engineering Reports & Demos","acad","Academic deliverable","Circuit diagrams, component lists, cost estimates, milestone reports and viva preparation, linked to the main projects.","Documentation"]
+];
+const $=id=>document.getElementById(id);
+let list=P,pos=0,tgt=0,drag=null,moved=0;
+const stage=$('stage'),info=$('info'),dlg=$('dlg');
+
+// chips
+const chips=$('chips');
+[["all","All"],...Object.entries(C).map(([k,v])=>[k,v[0]])].forEach(([k,t],i)=>{const b=document.createElement('button');b.textContent=t;if(!i)b.className='on';
+ b.onclick=()=>{chips.querySelectorAll('button').forEach(x=>x.className='');b.className='on';list=k==='all'?P:P.filter(p=>p[1]===k);pos=0;tgt=0;build()};chips.appendChild(b)});
+
+let cards=[];
+function build(){stage.innerHTML='';cards=list.map((p,i)=>{const c=document.createElement('button');c.className='card';c.style.background=`linear-gradient(135deg,${C[p[1]][1]},#000)`;
+ c.innerHTML=`<em>${p[2]}</em><b>${p[0]}</b><span>${p[3].slice(0,70)}…</span>`;
+ c.onclick=()=>{if(moved>6)return;const d=Math.round(((i-tgt)%list.length+list.length)%list.length);if(Math.abs(i-Math.round(tgt))===0||d===0)openP(p);else{tgt=i;setInfo()}};stage.appendChild(c);return c});setInfo()}
+function cidx(){const n=list.length;return((Math.round(tgt)%n)+n)%n}
+function setInfo(){const p=list[cidx()];info.innerHTML=`<b>${p[0]}</b>${C[p[1]][0]} · ${p[2]} · ${cidx()+1} of ${list.length}`}
+function render(){pos+=(tgt-pos)*.09;const n=list.length;
+ cards.forEach((c,i)=>{let d=((i-pos)%n+n)%n;if(d>n/2)d-=n;const a=Math.abs(d);
+  c.style.transform=`translateX(${d*58}%) translateZ(${-a*260}px) rotateY(${-d*38}deg)`;c.style.opacity=a>3.2?0:1;c.style.zIndex=100-Math.round(a*10)});
+ requestAnimationFrame(render)}
+function openP(p){$('dS').textContent=p[2];$('dN').textContent=p[0];$('dD').textContent=p[3];$('dT').textContent='Tech: '+p[4];
+ const row=$('dL');row.innerHTML='';if(p[5])row.innerHTML+=`<a href="${p[5]}" target="_blank" rel="noopener">Live site</a>`;if(p[6])row.innerHTML+=`<a href="${p[6]}" target="_blank" rel="noopener">GitHub</a>`;
+ const b=document.createElement('button');b.textContent='Close';b.onclick=()=>dlg.close();row.appendChild(b);dlg.showModal()}
+dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close()});
+const step=v=>{tgt=Math.round(tgt)+v;setInfo()};
+$('prev').onclick=()=>step(-1);$('next').onclick=()=>step(1);
+const work=$('work');
+work.addEventListener('wheel',e=>{if(Math.abs(e.deltaX)>Math.abs(e.deltaY)){e.preventDefault();tgt+=e.deltaX/400;setInfo()}},{passive:false});
+work.addEventListener('pointerdown',e=>{if(e.target.closest('.chips,.ctrl'))return;drag={x:e.clientX,t:tgt};moved=0});
+addEventListener('pointermove',e=>{if(drag){moved=Math.abs(e.clientX-drag.x);tgt=drag.t-(e.clientX-drag.x)/260;setInfo()}});
+addEventListener('pointerup',()=>{if(drag){tgt=Math.round(tgt);drag=null;setInfo();setTimeout(()=>moved=0,50)}});
+addEventListener('keydown',e=>{if(dlg.open)return;if(e.key==='ArrowRight')step(1);if(e.key==='ArrowLeft')step(-1)});
+build();render();
+
+// stats + skills + gallery
+const cnt=(el,n)=>{let v=0;const t=setInterval(()=>{v+=Math.max(1,Math.ceil(n/30));if(v>=n){v=n;clearInterval(t)}el.textContent=v},40)};
+const skills='ESP32 / Arduino / C++ / JavaScript / Three.js / MediaPipe / GLSL / GSAP / Node.js / Express / SQLite / React / Kotlin / Godot 4 / Netlify / GitHub / ';
+$('sk').innerHTML=skills.repeat(2)+skills.repeat(2);
+$('rail').innerHTML=['hobby','red','suit','knight','circle','banner'].map(n=>`<img src="${n==='suit'?'suit.png':`${n}.jpg`}" alt="Avinash portrait ${n}" loading="lazy">`).join('').repeat(2);
+
+// cursor + spotlight
+const cur=$('cur'),about=$('about');
+addEventListener('pointermove',e=>{cur.style.transform=`translate(${e.clientX-7}px,${e.clientY-7}px)`;const r=about.getBoundingClientRect();about.style.setProperty('--x',e.clientX+'px');about.style.setProperty('--y',(e.clientY-r.top)+'px')});
+document.querySelectorAll('a,button').forEach(el=>{el.addEventListener('pointerenter',()=>cur.classList.add('big'));el.addEventListener('pointerleave',()=>cur.classList.remove('big'))});
+stage.addEventListener('pointerover',e=>{if(e.target.closest('.card'))cur.classList.add('big')});stage.addEventListener('pointerout',()=>cur.classList.remove('big'));
+// magnetic button
+const mail=$('mail');mail.addEventListener('pointermove',e=>{const r=mail.getBoundingClientRect();mail.style.transform=`translate(${(e.clientX-r.left-r.width/2)*.25}px,${(e.clientY-r.top-r.height/2)*.4}px)`});
+mail.addEventListener('pointerleave',()=>mail.style.transform='');
+mail.onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(mail.dataset.m);mail.textContent='Copied';setTimeout(()=>mail.textContent='Copy email',1600)};
+// text scramble on nav
+document.querySelectorAll('.sc').forEach(a=>{const o=a.textContent;a.addEventListener('pointerenter',()=>{let i=0;const t=setInterval(()=>{a.textContent=[...o].map((c,k)=>k<i?c:String.fromCharCode(65+Math.random()*26)).join('');if(++i>o.length){a.textContent=o;clearInterval(t)}},45)})});
+
+// scroll-driven
+const ah=$('aboutH'),bio=$('bio'),words=[...document.querySelectorAll('.words div')],wordTops=words.map(w=>w.getBoundingClientRect().top+scrollY),person=$('person');let glitched=false,counted=false;
+function onScroll(){const vh=innerHeight,r=about.getBoundingClientRect();
+ const t=Math.min(1,Math.max(0,-r.top/(r.height-vh)));
+ ah.style.setProperty('--s',1+t*2.2);ah.style.setProperty('--o',Math.max(0,1-t*2.4));
+ bio.style.setProperty('--b',Math.min(1,Math.max(0,(t-.35)*3)));
+ if(r.top<vh*.4&&!glitched){glitched=true;ah.classList.add('on');setTimeout(()=>ah.classList.remove('on'),1000)}if(r.top>vh)glitched=false;
+ if(t>.5&&!counted){counted=true;cnt($('s1'),P.length);cnt($('s2'),P.filter(p=>p[5]).length);cnt($('s3'),P.filter(p=>p[1]==='iot'&&/Hardware/.test(p[2])).length)}
+ words.forEach((w,i)=>{w.style.transform=`translateX(${(wordTops[i]-scrollY-vh/2)*(+w.dataset.sp)/250}vw)`});
+ person.querySelector('img').style.transform=`scale(1.08) translateY(${Math.min(scrollY,vh)*.06}px)`;
+ $('bar').style.transform=`scaleX(${scrollY/(document.body.scrollHeight-vh)})`}
+addEventListener('scroll',onScroll,{passive:true});onScroll();
+
+// loader
+let p=0;const pt=setInterval(()=>{p=Math.min(100,p+Math.ceil(Math.random()*9));$('pct').textContent=p+'%';if(p>=100){clearInterval(pt);setTimeout(()=>{$('loader').classList.add('done');document.body.classList.add('go')},300)}},90);
+</script>
+</body>
+</html>
