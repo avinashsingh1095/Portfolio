@@ -66,12 +66,20 @@ body.go .person{clip-path:inset(0)}
 .chips button{border:1px solid var(--ink);background:none;border-radius:99px;padding:6px 16px;font-size:13px;cursor:none}
 .chips button.on,.chips button:hover{background:var(--ink);color:var(--paper)}
 .stage{position:absolute;inset:0;transform-style:preserve-3d}
-.card{position:absolute;left:50%;top:52%;width:min(62vw,500px);aspect-ratio:16/10;margin:calc(min(62vw,500px)*-.3) 0 0 calc(min(62vw,500px)*-.5);border-radius:6px;overflow:hidden;color:#fff;padding:20px;display:flex;flex-direction:column;justify-content:space-between;will-change:transform;border:0;text-align:left;cursor:none}
+.card{position:absolute;left:50%;top:52%;width:min(62vw,500px);aspect-ratio:16/10;margin:calc(min(62vw,500px)*-.3) 0 0 calc(min(62vw,500px)*-.5);border-radius:6px;overflow:hidden;color:var(--card-text,#fff);padding:20px;display:flex;flex-direction:column;justify-content:space-between;gap:12px;will-change:transform;border:0;text-align:left;cursor:none}
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.card-tag{font-size:11px;line-height:1;border:1px solid currentColor;padding:6px 10px;border-radius:999px;background:rgba(0,0,0,.14);backdrop-filter:blur(2px)}
 .card b{font-weight:800;font-size:clamp(24px,4vw,46px);letter-spacing:-.04em;line-height:.95}
-.card span{font-size:13px;opacity:.8;max-width:34ch;line-height:1.4}
+.card span{font-size:13px;opacity:.83;max-width:34ch;line-height:1.4}
 .card em{font-style:normal;font-size:12px;border:1px solid #fff7;border-radius:99px;padding:4px 12px;align-self:flex-start}
 .card::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,#fff3 50%,transparent 60%);transform:translateX(-100%);transition:transform .8s}
 .card:hover::after{transform:translateX(100%)}
+.card-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--card-text,#f5f3f1)}
+.card-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.card-btn{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:7px 12px;font-size:12px;font-weight:700;transition:transform .2s ease,opacity .2s ease;border:1px solid rgba(255,255,255,.38);text-align:center}
+.card-btn:hover,.card-btn:focus-visible{transform:translateY(-1px)}
+.card-btn.live{background:var(--paper);color:var(--ink);border-color:transparent}
+.card-btn.repo{background:rgba(0,0,0,.18);color:var(--card-text,#fff)}
 .info{position:absolute;bottom:10vh;left:0;right:0;text-align:center;font-size:15px}
 .info b{display:block;font-size:22px;margin-bottom:4px;letter-spacing:-.02em}
 .ctrl{position:absolute;bottom:3.5vh;left:50%;transform:translateX(-50%);display:flex;gap:14px;z-index:200}
@@ -134,7 +142,7 @@ footer p{color:#aaa;max-width:46ch;line-height:1.55;margin-bottom:26px}
     <h2 id="aboutH" class="glitch" data-t="About&#10;me">About<br>me</h2>
     <div class="bio" id="bio">
       <p>I'm Avinash, an Electrical and Computer Engineering student at MITS, Gwalior. I build ESP32 devices, web apps, games and a manga platform.</p>
-      <div class="stats"><div><b data-n="0" id="s1">0</b><span>Projects</span></div><div><b id="s2">0</b><span>Live sites</span></div><div><b id="s3">0</b><span>Hardware builds</span></div></div>
+      <div class="stats"><div><b data-n="0" id="s1">0</b><span>Projects</span></div><div><b id="s2">0</b><span>Verified live</span></div><div><b id="s3">0</b><span>Open-source repos</span></div></div>
     </div>
   </div>
 </section>
@@ -179,36 +187,36 @@ footer p{color:#aaa;max-width:46ch;line-height:1.55;margin-bottom:26px}
 </footer>
 
 <script>
-const C={iot:["IoT & Hardware","#0b3b4a"],web:["Web","#1f1a3d"],game:["Games","#3d0f0f"],full:["Full-stack","#1d2a12"],hack:["Hackathon & Startup","#3b2a0a"],acad:["Academic","#232323"]};
-// n=name c=category s=status d=description t=tech l=live g=github. Edit statuses here as you verify them.
+const C={featured:["Featured Projects","#ff2a1f"],web:["Web Development","#1f1a3d"],iot:["IoT & Embedded","#0b3b4a"],game:["Games & Interactive","#3d0f0f"],practice:["Programming Practice","#2a2f2a"],creative:["Learning & Creative","#3b2a0a"]};
 const P=[
-["Smart Water Quality Monitoring","iot","Hardware prototype","ESP32 system reading pH, TDS, turbidity and temperature into a quality score and dashboard. Example readings are illustrative, not proof of potability.","ESP32, pH / TDS / turbidity / temperature sensors"],
-["Visitor Alert System","iot","Status unverified","Detects visitors with motion and distance sensors and raises an alert. ESP32-CAM integration is intended.","Arduino UNO, PIR, HC-SR04, ESP32-CAM, buzzer"],
-["Smart AQI & Temperature Monitor","iot","Hardware prototype","ESP32 device showing air quality and temperature on an OLED, with a companion website. MQ135 readings are estimates and need calibration.","ESP32, MQ135, BMP280, OLED"],
-["Embedded Lab Experiments","iot","Academic deliverable","Nine separate experiments: LED control, potentiometer dimmer, threshold buzzer, relay bulb, ultrasonic alert, soil moisture, DHT11, rain detection and L298N motor control.","Arduino, C++"],
-["CircuitBench","web","Deployed","Electronics tutorial website with a tutorial index and technical guides, deployed on Netlify.","HTML, CSS, JavaScript, Netlify, GitHub","https://circuitbench1.netlify.app/","https://github.com/avinashsingh1095/circuitbench.git"],
-["Vidyalaya Pulse","hack","Working prototype","School platform for attendance, notes, marks and parent links. Built for SIH preparation with team TECHNOVERSE (MITS/SIH26/136). Not a production system.","Node.js, Express, SQLite, JavaScript"],
-["Learn Before 2027","web","Deployed","Personal roadmap and developer profile site.","HTML, CSS, JavaScript, GitHub Pages","https://avinashsingh1095.github.io/Learn-Before-2027----Avinash-singh-paviya/"],
-["CastingCall","full","Planned","Audition platform for performers: sign-up, casting listings, applications and a casting-team dashboard, later as an installable PWA and Android app.","Planned: backend, database, PWA"],
-["Rakshabandhan Special","game","Deployed","Festival-themed slicing game that runs in the browser.","JavaScript, Netlify","https://helpful-douhua-3c1e98.netlify.app/"],
-["Snake Eye","game","Planned","Snake controlled by camera-based hand gestures instead of arrow buttons.","HTML, Canvas, JavaScript, hand tracking"],
-["Flappy Bird Advanced","game","Status unverified","Enhanced side-scrolling arcade game with obstacle generation, scoring and restart.","JavaScript, Canvas"],
-["KisanDirect","hack","Planned","Farmer-to-consumer marketplace concept for SIH26033: produce listings, buyer discovery, ordering and price transparency.","Concept"],
-["Prompt Library","web","Status unverified","Organise, search and copy reusable AI prompts by category.","HTML, CSS, JavaScript"],
-["Festival Game Engine","game","Planned","Reusable foundation for festival-themed browser games: scoring, input, animation and game states.","JavaScript"],
-["MangaASP (INKBOUND)","web","Status unverified","Manga platform for reading and publishing my own manga.","Web"],
-["FRIDAY Assistant","web","Status unverified","Iron Man-inspired AI voice assistant built as an installable web app.","PWA, JavaScript"],
-["Domain Expansion","web","Status unverified","Jujutsu Kaisen-inspired 3D web experience controlled with hand tracking.","Three.js, MediaPipe, GLSL"],
-["Hatiyana","game","Status unverified","Gamified running app where you capture territory by running.","GPS, JavaScript"],
-["QR/FORGE","web","Status unverified","Full-featured QR code generator.","JavaScript"],
-["Student OS","web","Status unverified","Academic tracker with XP, Pomodoro timer and SGPA calculator.","HTML, JavaScript"],
-["The Archive","web","Status unverified","Self-hosted gallery for 500+ photos and videos with tags, albums and zip downloads.","Web"],
-["Power Grid Simulator","game","Status unverified","Game about running the Indian power grid.","Godot 4"],
-["Android File Organizer","full","Status unverified","Android app that sorts documents, photos and videos into custom folders.","Kotlin, Android Studio"],
-["Year Quizzes Generator","web","Status unverified","Quiz app that generates questions from PDFs using Claude.","React, Claude API"],
-["Fundamentals of Virtual Reality","acad","Academic deliverable","NPTEL-related presentation on VR concepts. Not a software application.","Slides"],
-["Introduction to Machine Learning","acad","Academic deliverable","Course presentation on core ML concepts. No trained model is claimed.","Slides"],
-["Engineering Reports & Demos","acad","Academic deliverable","Circuit diagrams, component lists, cost estimates, milestone reports and viva preparation, linked to the main projects.","Documentation"]
+["CircuitBench","featured","Verified Live","Electronics learning website with practical engineering tutorials, calculators and learning resources for circuit-based study.","HTML, CSS, JavaScript, Netlify","https://circuitbench1.netlify.app/","https://github.com/avinashsingh1095/circuitbench"],
+["Rakshabandhan Special — Rakhi Rush","featured","Verified Live","Mobile-friendly festival arcade game with meteor slicing, score pursuit and quick browser gameplay designed for casual play.","HTML5 Canvas, JavaScript, Netlify","https://helpful-douhua-3c1e98.netlify.app/","https://github.com/avinashsingh1095/rakshabandhan-special-code1"],
+["Vidyalaya Pulse","featured","Verified Live","School attendance, notes and parent-facing portal concept presented as a front-end GitHub Pages preview; the repository documents a Node.js, Express and SQLite backend, although that backend is not hosted here.","Node.js, Express, SQLite, JavaScript","https://avinashsingh1095.github.io/Vidyalaya-Pulse/","https://github.com/avinashsingh1095/Vidyalaya-Pulse"],
+["Learn Before 2027","featured","Verified Live","Learning-oriented productivity website focused on roadmap building, skill preparation and future-focused planning, with a to-do-like workflow as part of the experience.","HTML, CSS, JavaScript, Netlify","https://learnbefore2027.netlify.app/","https://github.com/avinashsingh1095/Learn-Before-2027----Avinash-singh-paviya"],
+["Smart AQI Monitor","featured","Verified Live","Air-quality dashboard and hardware concept page for AQI monitoring, presented as a front-end prototype rather than a live sensor feed connected to real-time hardware.","HTML, CSS, JavaScript, IoT Dashboard","https://avinashsingh1095.github.io/smart-AQI-monitor-/","https://github.com/avinashsingh1095/smart-AQI-monitor-"],
+["Quick Quiz","web","Source Available","Quiz-focused web project for learning and practice sessions; the source repository is available while no verified deployment was supplied.","HTML, CSS, JavaScript","","https://github.com/avinashsingh1095/Quick-Quiz"],
+["FSDS.Avinash.com","web","Verified Live","Project landing page and showcase for a finger-structure detection system concept, presented as a technical demo site rather than a generic portfolio page.","HTML, CSS, JavaScript","https://avinashsingh1095.github.io/FSDS.Avinash.com/","https://github.com/avinashsingh1095/FSDS.Avinash.com"],
+["AQI Monitoring by ESP32","iot","Source Available","ESP32-focused embedded AQI monitoring project that appears to be a separate implementation from the dashboard-style Smart AQI Monitor repository.","ESP32, Arduino, C++, MQ Sensors","","https://github.com/avinashsingh1095/AQI-monitoring-by-esp32"],
+["Gesture First","game","Verified Live","Browser-based gesture-control prototype using camera access and motion input for an interactive experience with a web interface.","JavaScript, Web APIs, Camera Access","https://avinash-gesture-first.netlify.app/",""],
+["C Projects","practice","Source Available","Collection of C programming exercises and practica covering core logic, control flow and computation fundamentals.","C, GCC, Algorithms","","https://github.com/avinashsingh1095/c-projects"],
+["Embedded Systems by Avinash","iot","Source Available","Embedded engineering experiments and learning notes covering hardware examples, microcontroller practice and electronics projects.","Embedded C, Arduino, Electronics","","https://github.com/avinashsingh1095/Embeddend-system-by-Avinash-"],
+["Inkbound Avinash","creative","Demo Unavailable","Creative personal website focused on manga, art and storytelling; the live page was unavailable during validation and no source repository was provided.","HTML, CSS, JavaScript","",""],
+["AQI Micro Project","iot","Demo Unavailable","Academic AQI concept with no confirmed live deployment or linked repository in the current validation pass, and should be treated as an early-stage project rather than a completed product.","HTML, CSS, JavaScript","",""]
+];
+const CARD_THEMES=[
+{background:"#A31C1B",shadow:"#171717",text:"#fff"},
+{background:"#06110C",shadow:"#243b2b",text:"#fff"},
+{background:"#A66BFF",shadow:"#392453",text:"#fff"},
+{background:"#FFF21A",shadow:"#b29c08",text:"#171717"},
+{background:"#174D3B",shadow:"#06110C",text:"#fff"},
+{background:"#3D246B",shadow:"#171717",text:"#fff"},
+{background:"#214B73",shadow:"#101820",text:"#fff"},
+{background:"#455A3B",shadow:"#17251b",text:"#fff"},
+{background:"#66222B",shadow:"#171717",text:"#fff"},
+{background:"#171717",shadow:"#343434",text:"#fff"},
+{background:"#0B3340",shadow:"#06110C",text:"#fff"},
+{background:"#5B386F",shadow:"#241b2c",text:"#fff"},
+{background:"#70451C",shadow:"#171717",text:"#fff"}
 ];
 const $=id=>document.getElementById(id);
 let list=P,pos=0,tgt=0,drag=null,moved=0;
@@ -220,9 +228,9 @@ const chips=$('chips');
  b.onclick=()=>{chips.querySelectorAll('button').forEach(x=>x.className='');b.className='on';list=k==='all'?P:P.filter(p=>p[1]===k);pos=0;tgt=0;build()};chips.appendChild(b)});
 
 let cards=[];
-function build(){stage.innerHTML='';cards=list.map((p,i)=>{const c=document.createElement('button');c.className='card';c.style.background=`linear-gradient(135deg,${C[p[1]][1]},#000)`;
- c.innerHTML=`<em>${p[2]}</em><b>${p[0]}</b><span>${p[3].slice(0,70)}…</span>`;
- c.onclick=()=>{if(moved>6)return;const d=Math.round(((i-tgt)%list.length+list.length)%list.length);if(Math.abs(i-Math.round(tgt))===0||d===0)openP(p);else{tgt=i;setInfo()}};stage.appendChild(c);return c});setInfo()}
+function build(){stage.innerHTML='';cards=list.map((p,i)=>{const c=document.createElement('div');c.className='card';const theme=CARD_THEMES[P.indexOf(p)];c.style.background=`linear-gradient(135deg,${theme.background},${theme.shadow})`;c.style.setProperty('--card-text',theme.text);
+ c.innerHTML=`<div class="card-top"><em>${p[2]}</em><span class="card-tag">${C[p[1]][0]}</span></div><b>${p[0]}</b><span>${p[3].length>110?p[3].slice(0,110)+'…':p[3]}</span><div class="card-meta">${p[4]}</div><div class="card-actions">${p[5]?`<a class="card-btn live" href="${p[5]}" target="_blank" rel="noopener">Live Demo</a>`:''}${p[6]?`<a class="card-btn repo" href="${p[6]}" target="_blank" rel="noopener">View Source Code</a>`:''}</div>`;
+ c.addEventListener('click',e=>{if(e.target.closest('a'))return;if(moved>6)return;const d=Math.round(((i-tgt)%list.length+list.length)%list.length);if(Math.abs(i-Math.round(tgt))===0||d===0)openP(p);else{tgt=i;setInfo()}});stage.appendChild(c);return c});setInfo()}
 function cidx(){const n=list.length;return((Math.round(tgt)%n)+n)%n}
 function setInfo(){const p=list[cidx()];info.innerHTML=`<b>${p[0]}</b>${C[p[1]][0]} · ${p[2]} · ${cidx()+1} of ${list.length}`}
 function render(){pos+=(tgt-pos)*.09;const n=list.length;
@@ -230,7 +238,7 @@ function render(){pos+=(tgt-pos)*.09;const n=list.length;
   c.style.transform=`translateX(${d*58}%) translateZ(${-a*260}px) rotateY(${-d*38}deg)`;c.style.opacity=a>3.2?0:1;c.style.zIndex=100-Math.round(a*10)});
  requestAnimationFrame(render)}
 function openP(p){$('dS').textContent=p[2];$('dN').textContent=p[0];$('dD').textContent=p[3];$('dT').textContent='Tech: '+p[4];
- const row=$('dL');row.innerHTML='';if(p[5])row.innerHTML+=`<a href="${p[5]}" target="_blank" rel="noopener">Live site</a>`;if(p[6])row.innerHTML+=`<a href="${p[6]}" target="_blank" rel="noopener">GitHub</a>`;
+ const row=$('dL');row.innerHTML='';if(p[5])row.innerHTML+=`<a href="${p[5]}" target="_blank" rel="noopener">Live Demo</a>`;if(p[6])row.innerHTML+=`<a href="${p[6]}" target="_blank" rel="noopener">View Source Code</a>`;
  const b=document.createElement('button');b.textContent='Close';b.onclick=()=>dlg.close();row.appendChild(b);dlg.showModal()}
 dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close()});
 const step=v=>{tgt=Math.round(tgt)+v;setInfo()};
@@ -268,7 +276,7 @@ function onScroll(){const vh=innerHeight,r=about.getBoundingClientRect();
  ah.style.setProperty('--s',1+t*2.2);ah.style.setProperty('--o',Math.max(0,1-t*2.4));
  bio.style.setProperty('--b',Math.min(1,Math.max(0,(t-.35)*3)));
  if(r.top<vh*.4&&!glitched){glitched=true;ah.classList.add('on');setTimeout(()=>ah.classList.remove('on'),1000)}if(r.top>vh)glitched=false;
- if(t>.5&&!counted){counted=true;cnt($('s1'),P.length);cnt($('s2'),P.filter(p=>p[5]).length);cnt($('s3'),P.filter(p=>p[1]==='iot'&&/Hardware/.test(p[2])).length)}
+ if(t>.5&&!counted){counted=true;cnt($('s1'),P.length);cnt($('s2'),P.filter(p=>p[5]).length);cnt($('s3'),P.filter(p=>p[6]).length)}
  words.forEach((w,i)=>{w.style.transform=`translateX(${(wordTops[i]-scrollY-vh/2)*(+w.dataset.sp)/250}vw)`});
  person.querySelector('img').style.transform=`scale(1.08) translateY(${Math.min(scrollY,vh)*.06}px)`;
  $('bar').style.transform=`scaleX(${scrollY/(document.body.scrollHeight-vh)})`}
