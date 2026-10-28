@@ -114,7 +114,46 @@ footer p{color:#aaa;max-width:46ch;line-height:1.55;margin-bottom:26px}
 .soc a{border-bottom:1px solid #fff5;padding-bottom:2px}
 .mail{border:1px solid var(--hot);background:var(--hot);color:var(--ink);font-weight:800;border-radius:99px;padding:12px 26px;cursor:none;transition:transform .2s}
 .cp{grid-column:1/-1;color:var(--mute);font-size:12px;margin-top:6vh}
-@media(max-width:700px){footer{grid-template-columns:1fr}.hero small,.hint{display:none}nav div{gap:16px}body,.chips button,.card,.ctrl button,.mail,dialog .row a,dialog .row button{cursor:auto}.cur{display:none}.stats{gap:5vw}}
+@media(max-width:700px){
+ body,.chips button,.card,.ctrl button,.mail,dialog .row a,dialog .row button{cursor:auto}
+ .cur{display:none}
+ nav{padding:16px 4vw;font-size:12px}
+ nav div{gap:clamp(8px,2.4vw,16px)}
+ .hero{min-height:100svh}
+ .hero h1{font-size:clamp(46px,13vw,88px)}
+ .hero small,.hint{display:none}
+ .person{width:min(68vw,300px);height:58svh}
+ .person img{object-fit:contain;object-position:center bottom}
+ .about{min-height:150svh}
+ .about .sticky{height:100svh;padding:0 5vw}
+ .about h2{font-size:clamp(60px,19vw,108px)}
+ .bio{width:90vw;font-size:clamp(16px,4.6vw,20px)}
+ .stats{gap:2vw;margin-top:20px}
+ .stats b{font-size:clamp(28px,9vw,42px)}
+ .stats span{font-size:10px}
+ .words{padding:8vh 0}
+ .skills{padding:14px 0}
+ .work{height:100svh;min-height:760px}
+ .chips{top:11vh;left:4vw;right:4vw;justify-content:center;gap:6px}
+ .chips button{padding:6px 10px;font-size:11px}
+ .card{top:51%;width:min(88vw,430px);min-height:300px;aspect-ratio:auto;margin:-150px 0 0 calc(min(88vw,430px)*-.5);padding:16px;gap:9px}
+ .card b{font-size:clamp(23px,7vw,32px)}
+ .card span{font-size:12px}
+ .info{bottom:11vh;padding:0 12px;font-size:13px}
+ .info b{font-size:19px}
+ .ctrl{gap:10px}
+ .ctrl button{padding:8px 18px}
+ dialog{padding:24px;max-height:84svh}
+ .gal{padding:9vh 0}
+ .gal h3{font-size:clamp(32px,9vw,58px);padding:0 5vw 4vh}
+ .rail{gap:4vw;padding:0 5vw}
+ .rail img{height:min(42svh,320px);max-width:82vw;object-fit:contain}
+ footer{grid-template-columns:1fr;padding:9vh 7vw 5vh}
+ .ph{width:min(72vw,260px);justify-self:center}
+ footer h4{font-size:clamp(40px,11vw,64px)}
+ .soc{gap:16px}
+ .cp{margin-top:3vh}
+}
 @media(prefers-reduced-motion:reduce){*{animation-duration:.01s!important;transition-duration:.01s!important}}
 </style>
 </head>
@@ -278,7 +317,7 @@ function onScroll(){const vh=innerHeight,r=about.getBoundingClientRect();
  if(r.top<vh*.4&&!glitched){glitched=true;ah.classList.add('on');setTimeout(()=>ah.classList.remove('on'),1000)}if(r.top>vh)glitched=false;
  if(t>.5&&!counted){counted=true;cnt($('s1'),P.length);cnt($('s2'),P.filter(p=>p[5]).length);cnt($('s3'),P.filter(p=>p[6]).length)}
  words.forEach((w,i)=>{w.style.transform=`translateX(${(wordTops[i]-scrollY-vh/2)*(+w.dataset.sp)/250}vw)`});
- person.querySelector('img').style.transform=`scale(1.08) translateY(${Math.min(scrollY,vh)*.06}px)`;
+ person.querySelector('img').style.transform=innerWidth<=700?'none':`scale(1.08) translateY(${Math.min(scrollY,vh)*.06}px)`;
  $('bar').style.transform=`scaleX(${scrollY/(document.body.scrollHeight-vh)})`}
 addEventListener('scroll',onScroll,{passive:true});onScroll();
 
