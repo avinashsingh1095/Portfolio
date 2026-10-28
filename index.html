@@ -72,10 +72,10 @@ body.go .person{clip-path:inset(0)}
 .card b{font-weight:800;font-size:clamp(24px,4vw,46px);letter-spacing:-.04em;line-height:.95}
 .card span{font-size:13px;opacity:.83;max-width:34ch;line-height:1.4}
 .card em{font-style:normal;font-size:12px;border:1px solid #fff7;border-radius:99px;padding:4px 12px;align-self:flex-start}
-.card::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,#fff3 50%,transparent 60%);transform:translateX(-100%);transition:transform .8s}
+.card::after{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 40%,#fff3 50%,transparent 60%);transform:translateX(-100%);transition:transform .8s;pointer-events:none}
 .card:hover::after{transform:translateX(100%)}
 .card-meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--card-text,#f5f3f1)}
-.card-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
+.card-actions{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:8px;margin-top:4px}
 .card-btn{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;padding:7px 12px;font-size:12px;font-weight:700;transition:transform .2s ease,opacity .2s ease;border:1px solid rgba(255,255,255,.38);text-align:center}
 .card-btn:hover,.card-btn:focus-visible{transform:translateY(-1px)}
 .card-btn.live{background:var(--paper);color:var(--ink);border-color:transparent}
