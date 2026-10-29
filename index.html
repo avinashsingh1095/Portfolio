@@ -65,7 +65,7 @@ body.go .person{clip-path:inset(0)}
 .chips{position:absolute;top:13vh;left:4vw;right:4vw;display:flex;gap:8px;flex-wrap:wrap;z-index:200}
 .chips button{border:1px solid var(--ink);background:none;border-radius:99px;padding:6px 16px;font-size:13px;cursor:none}
 .chips button.on,.chips button:hover{background:var(--ink);color:var(--paper)}
-.stage{position:absolute;inset:0;transform-style:preserve-3d}
+.stage{position:absolute;inset:0;perspective:1400px}
 .card{position:absolute;left:50%;top:52%;width:min(62vw,500px);aspect-ratio:16/10;margin:calc(min(62vw,500px)*-.3) 0 0 calc(min(62vw,500px)*-.5);border-radius:6px;overflow:hidden;color:var(--card-text,#fff);padding:20px;display:flex;flex-direction:column;justify-content:space-between;gap:12px;will-change:transform;border:0;text-align:left;cursor:none}
 .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
 .card-tag{font-size:11px;line-height:1;border:1px solid currentColor;padding:6px 10px;border-radius:999px;background:rgba(0,0,0,.14);backdrop-filter:blur(2px)}
@@ -87,6 +87,7 @@ body.go .person{clip-path:inset(0)}
 .ctrl button:hover{background:var(--ink);color:var(--paper)}
 /* modal */
 dialog{margin:auto;width:min(92vw,620px);border:0;border-radius:10px;background:var(--ink);color:var(--paper);padding:34px;max-height:88vh;overflow:auto}
+dialog:not([open]){pointer-events:none}
 dialog::backdrop{background:#000c;backdrop-filter:blur(6px)}
 dialog[open]{animation:pop .45s cubic-bezier(.2,.8,.2,1)}
 @keyframes pop{from{transform:translateY(40px) scale(.96);opacity:0}}
@@ -267,14 +268,14 @@ const chips=$('chips');
  b.onclick=()=>{chips.querySelectorAll('button').forEach(x=>x.className='');b.className='on';list=k==='all'?P:P.filter(p=>p[1]===k);pos=0;tgt=0;build()};chips.appendChild(b)});
 
 let cards=[];
-function build(){stage.innerHTML='';cards=list.map((p,i)=>{const c=document.createElement('div');c.className='card';const theme=CARD_THEMES[P.indexOf(p)];c.style.background=`linear-gradient(135deg,${theme.background},${theme.shadow})`;c.style.setProperty('--card-text',theme.text);
+function build(){stage.innerHTML='';cards=list.map(p=>{const c=document.createElement('div');c.className='card';const theme=CARD_THEMES[P.indexOf(p)];c.style.background=`linear-gradient(135deg,${theme.background},${theme.shadow})`;c.style.setProperty('--card-text',theme.text);
  c.innerHTML=`<div class="card-top"><em>${p[2]}</em><span class="card-tag">${C[p[1]][0]}</span></div><b>${p[0]}</b><span>${p[3].length>110?p[3].slice(0,110)+'…':p[3]}</span><div class="card-meta">${p[4]}</div><div class="card-actions">${p[5]?`<a class="card-btn live" href="${p[5]}" target="_blank" rel="noopener">Live Demo</a>`:''}${p[6]?`<a class="card-btn repo" href="${p[6]}" target="_blank" rel="noopener">View Source Code</a>`:''}</div>`;
- c.addEventListener('click',e=>{if(e.target.closest('a'))return;if(moved>6)return;const d=Math.round(((i-tgt)%list.length+list.length)%list.length);if(Math.abs(i-Math.round(tgt))===0||d===0)openP(p);else{tgt=i;setInfo()}});stage.appendChild(c);return c});setInfo()}
+ stage.appendChild(c);return c});setInfo()}
 function cidx(){const n=list.length;return((Math.round(tgt)%n)+n)%n}
 function setInfo(){const p=list[cidx()];info.innerHTML=`<b>${p[0]}</b>${C[p[1]][0]} · ${p[2]} · ${cidx()+1} of ${list.length}`}
 function render(){pos+=(tgt-pos)*.09;const n=list.length;
  cards.forEach((c,i)=>{let d=((i-pos)%n+n)%n;if(d>n/2)d-=n;const a=Math.abs(d);
-  c.style.transform=`translateX(${d*58}%) translateZ(${-a*260}px) rotateY(${-d*38}deg)`;c.style.opacity=a>3.2?0:1;c.style.zIndex=100-Math.round(a*10)});
+  c.style.transform=`translateX(${d*58}%) translateZ(${-a*260}px) rotateY(${-d*38}deg)`;c.style.opacity=a>3.2?0:1;c.style.visibility=a>3.2?'hidden':'visible';c.style.pointerEvents=a<=.5?'auto':'none';c.style.zIndex=100-Math.round(a*10)});
  requestAnimationFrame(render)}
 function openP(p){$('dS').textContent=p[2];$('dN').textContent=p[0];$('dD').textContent=p[3];$('dT').textContent='Tech: '+p[4];
  const row=$('dL');row.innerHTML='';if(p[5])row.innerHTML+=`<a href="${p[5]}" target="_blank" rel="noopener">Live Demo</a>`;if(p[6])row.innerHTML+=`<a href="${p[6]}" target="_blank" rel="noopener">View Source Code</a>`;
@@ -283,9 +284,28 @@ dlg.addEventListener('click',e=>{if(e.target===dlg)dlg.close()});
 const step=v=>{tgt=Math.round(tgt)+v;setInfo()};
 $('prev').onclick=()=>step(-1);$('next').onclick=()=>step(1);
 const work=$('work');
+stage.addEventListener('click',e=>{
+ if(e.target.closest('a')||moved>=6)return;
+ let card=e.target.closest('.card');
+ if(!card){
+  card=cards.filter(c=>{
+   const r=c.getBoundingClientRect();
+   return c.style.visibility!=='hidden'&&e.clientX>=r.left&&e.clientX<=r.right&&e.clientY>=r.top&&e.clientY<=r.bottom;
+  }).sort((a,b)=>Number(b.style.zIndex)-Number(a.style.zIndex))[0];
+ }
+ if(!card)return;
+ const i=cards.indexOf(card),n=list.length;
+ let d=((i-pos)%n+n)%n;if(d>n/2)d-=n;
+ if(Math.abs(d)<=.5)openP(list[i]);
+ else{
+  const active=((Math.round(tgt)%n)+n)%n;
+  let delta=((i-active)%n+n)%n;if(delta>n/2)delta-=n;
+  tgt=active+delta;setInfo();
+ }
+});
 work.addEventListener('wheel',e=>{if(Math.abs(e.deltaX)>Math.abs(e.deltaY)){e.preventDefault();tgt+=e.deltaX/400;setInfo()}},{passive:false});
-work.addEventListener('pointerdown',e=>{if(e.target.closest('.chips,.ctrl'))return;drag={x:e.clientX,t:tgt};moved=0});
-addEventListener('pointermove',e=>{if(drag){moved=Math.abs(e.clientX-drag.x);tgt=drag.t-(e.clientX-drag.x)/260;setInfo()}});
+work.addEventListener('pointerdown',e=>{if(e.target.closest('.chips,.ctrl,a'))return;drag={x:e.clientX,y:e.clientY,t:tgt};moved=0});
+addEventListener('pointermove',e=>{if(drag){moved=Math.hypot(e.clientX-drag.x,e.clientY-drag.y);if(moved>=6){tgt=drag.t-(e.clientX-drag.x)/260;setInfo()}}});
 addEventListener('pointerup',()=>{if(drag){tgt=Math.round(tgt);drag=null;setInfo();setTimeout(()=>moved=0,50)}});
 addEventListener('keydown',e=>{if(dlg.open)return;if(e.key==='ArrowRight')step(1);if(e.key==='ArrowLeft')step(-1)});
 build();render();
